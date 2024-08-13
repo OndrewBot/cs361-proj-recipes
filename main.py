@@ -1,7 +1,8 @@
 import json
-from redis_om import get_redis_connection, HashModel, BaseModel
+from redis_om import get_redis_connection, HashModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 
 app = FastAPI()
