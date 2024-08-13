@@ -1,5 +1,5 @@
 import json
-from redis_om import get_redis_connection, HashModel
+from redis_om import get_redis_connection, HashModel, BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,17 +29,24 @@ class Recipe(HashModel):
     class Meta:
         database = redis
 
-@app.post("/newrecipe")
-def create_recipe(name: str, description: str, ingredients: list[str], amounts: list[str], units: list[str]):
-    recipe = Recipe(
-        name=name, 
-        description=description, 
-        ingredients=json.dumps(ingredients),
-        amounts=json.dumps(amounts), 
-        units=json.dumps(units)
+class RecipeCreateRequest(BaseModel):
+    name: str
+    description: str
+    ingredients: list[str]
+    amounts: list[str]
+    units: list[str]
+
+@app.post("/recipes")
+def create_recipe(recipe: RecipeCreateRequest):
+    recipe_data = Recipe(
+        name=recipe.name,
+        description=recipe.description,
+        ingredients=json.dumps(recipe.ingredients),
+        amounts=json.dumps(recipe.amounts),
+        units=json.dumps(recipe.units)
     )
-    recipe.save()
-    return recipe
+    recipe_data.save()
+    return recipe_data
 
 @app.get("/recipes/{pk}")
 def get_recipe(pk: str):
