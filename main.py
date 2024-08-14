@@ -51,13 +51,17 @@ def create_recipe(recipe: RecipeCreateRequest):
     recipe_data.save()
     return recipe_data
 
-@app.get("/recipes/{pk}")
-def get_recipe(pk: str):
-    return format_recipe(pk)
-
 @app.get("/recipes")
 def get_recipe_names():
     return [format_recipe_name(pk) for pk in Recipe.all_pks()]
+
+@app.delete("/recipes/{pk}")
+def del_recipe(pk: str):
+    return Recipe.delete(pk)
+
+@app.get("/recipes/{pk}")
+def get_recipe(pk: str):
+    return format_recipe(pk)
 
 # Updated formatting functions
 def format_recipe(pk: str):
