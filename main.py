@@ -96,4 +96,4 @@ def update_recipe(pk: str, updated_recipe: RecipeCreateRequest):
     # Save the updated recipe
     existing_recipe.save()
     
-    return format_recipe(pk)
+    return {"id": pk}
