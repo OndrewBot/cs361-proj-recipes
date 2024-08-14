@@ -82,3 +82,18 @@ def format_recipe_name(pk: str):
         "name": a_recipe.name,
         "description": a_recipe.description
     }
+
+@app.put("/recipes/{pk}")
+def update_recipe(pk: str, updated_recipe: RecipeCreateRequest):
+    # Retrieve the existing recipe
+    existing_recipe = Recipe.get(pk)
+    
+    # Update the existing recipe with the new data
+    existing_recipe.name = updated_recipe.name
+    existing_recipe.description = updated_recipe.description
+    existing_recipe.ingredients = json.dumps([ingredient.model_dump() for ingredient in updated_recipe.ingredients])
+    
+    # Save the updated recipe
+    existing_recipe.save()
+    
+    return format_recipe(pk)
